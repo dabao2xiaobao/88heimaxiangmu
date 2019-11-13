@@ -6,8 +6,8 @@
       <div class='title'>
         <img src="../../assets/img/logo_index.png" alt="">
       </div>
-      <!-- 表单   表单数据对象      验证规则对象 -->
-      <el-form :model="loginForm" :rules="loginRules" style="margin-top:30px">
+      <!-- 表单   表单数据对象      验证规则对象  给一个ref属性-->
+      <el-form ref="fromObj" :model="loginForm" :rules="loginRules" style="margin-top:30px">
         <!-- 一个表单域就是一个form-item -->
         <el-form-item prop="mobile">
           <!-- 放置表单组件  -->
@@ -24,7 +24,7 @@
            <el-checkbox v-model="loginForm.checked">我已阅读并同意用户协议及条款</el-checkbox>
          </el-form-item>
          <el-form-item>
-           <el-button style="width:100%" type='primary'>登录</el-button>
+           <el-button style="width:100%" type='primary' @click="login">登录</el-button>
          </el-form-item>
       </el-form>
     </el-card>
@@ -68,6 +68,16 @@ export default {
           } }
         ]
       }
+    }
+  },
+  methods: {
+    login () {
+      // 获取实例对象
+      this.$refs.fromObj.validator(function (isOK) {
+        if (isOK) {
+        // 如果为true就去数据库校验数据
+        }
+      })
     }
   }
 }
