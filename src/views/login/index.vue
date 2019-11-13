@@ -7,7 +7,7 @@
         <img src="../../assets/img/logo_index.png" alt="">
       </div>
       <!-- 表单   表单数据对象      验证规则对象  给一个ref属性-->
-      <el-form ref="fromObj" :model="loginForm" :rules="loginRules" style="margin-top:30px">
+      <el-form ref="formObj" :model="loginForm" :rules="loginRules" style="margin-top:30px">
         <!-- 一个表单域就是一个form-item -->
         <el-form-item prop="mobile">
           <!-- 放置表单组件  -->
@@ -73,9 +73,22 @@ export default {
   methods: {
     login () {
       // 获取实例对象
-      this.$refs.fromObj.validator(function (isOK) {
+      this.$refs.formObj.validate((isOK) => {
         if (isOK) {
         // 如果为true就去数据库校验数据
+          this.$axios({
+            url: '/authorizations',
+            data: this.loginForm,
+            method: 'post'
+          }).then(result => {
+            window.localStorage.setItem('user-token', result.data.data.token)
+            this.$router.push('./home')
+          }).catch(() => {
+            this.$message({
+              type: 'warning',
+              message: '手机号或者验证码错误'
+            })
+          })
         }
       })
     }
