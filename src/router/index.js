@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 // import Home from '../views/home'
 import Layout from '../views/layout'
 import Login from '../views/login'
+import Home from '@/views/home'
 Vue.use(VueRouter)
 
 const routes = [
@@ -13,7 +14,14 @@ const routes = [
   {
     path: '/',
     // name: 'home',
-    component: Layout
+    component: Layout,
+    children: [
+      {
+        // 首页
+        path: '',
+        component: Home
+      }
+    ]
   },
   {
     // 一级路由登录页
