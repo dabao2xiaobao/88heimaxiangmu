@@ -8,8 +8,12 @@ import axios from 'axios'
 import 'nprogress/nprogress.css'
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'
 Vue.prototype.$axios = axios // 共享axios所有实例上使用
+Vue.use(ElementUI, {
+  // 项目中所有拥有 size 属性的组件的默认尺寸均为 'small'
+  size: 'small'
+})
 Vue.config.productionTip = false
-Vue.use(ElementUI)
+
 new Vue({
   router,
   render: h => h(App)
