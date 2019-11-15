@@ -63,7 +63,7 @@ export default {
               callback() // 直接执行callback
             } else {
               // 没有选中就不通过,给一个错误信息
-              callback(new Error('不点√你看你妈呦')) // 也直接执行callback
+              callback(new Error('不点√你看(,,´•ω•)ノ"(´っω•｀。))呦')) // 也直接执行callback
             }
           } }
         ]

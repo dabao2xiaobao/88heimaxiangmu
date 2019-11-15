@@ -33,24 +33,25 @@
 export default {
   methods: {
     onLogout () {
-      this.$confirm('确定退出吗?', '退出提示', {
-        $confirmButtonText: '确定',
+      this.$confirm('确认推出吗？', '退出提示', {
+        confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        //   确定删除执行这里,删除的话根据token删除
+        // 确认执行这里
+        // 删除 token
         window.localStorage.removeItem('user-token')
-        // 删除了以后跳转到登录页
+        // 跳转到登录页
         this.$router.push('/login')
         this.$message({
-          type: 'seccess',
-          message: '退出成功'
+          type: 'success',
+          message: '退出成功!'
         })
       }).catch(() => {
-        //   取消退出执行这里
+        // 取消执行这里
         this.$message({
           type: 'info',
-          message: '取消退出成功'
+          message: '已取消退出'
         })
       })
     }
