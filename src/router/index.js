@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 // import Home from '../views/home'
-import Layout from '../views/layout'
-import Login from '../views/login'
+import Layout from '@/views/layout'
+import Login from '@/views/login'
 import Home from '@/views/home'
 import Article from '@/views/article'
-import Publich from '@/views/publich'
+import Publish from '@/views/publish'
 import Comment from '@/views/comment'
 import Image from '@/views/image'
 Vue.use(VueRouter)
@@ -30,8 +30,8 @@ const routes = [
         component: Article
       },
       {
-        path: '/publich',
-        component: Publich
+        path: '/publish',
+        component: Publish
       },
       {
         path: '/comment',

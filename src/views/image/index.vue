@@ -1,5 +1,5 @@
 <template>
-  <div class="素材管理"></div>
+  <div class="image">素材管理</div>
 </template>
 
 <script>

@@ -73,6 +73,9 @@ export default {
   methods: {
     login () {
       // 获取实例对象
+      //  el-form 组件有个方法叫 validate，用于手动触发校验
+      //  如何调用到这个组件的 validate 方法？
+      //  我们可以通过 ref 来获取这个组件本身，然后就可以调用它的这个 validate 方法了
       this.$refs.formObj.validate((isOK) => {
         if (isOK) {
         // 如果为true就去数据库校验数据

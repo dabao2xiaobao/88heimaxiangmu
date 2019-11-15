@@ -7,17 +7,17 @@
         <img src="../../assets/img/logo_admin.png" alt="">
       </div>
       <!-- 左侧菜单 -->
-      <el-menu style="width:221px" background-color="#353b4e" text-color="#adafb5" active-text-color="#ffd04b">
+      <el-menu router style="width:221px" background-color="#353b4e" text-color="#adafb5" active-text-color="#ffd04b">
         <!-- 一级菜单 -->
         <el-menu-item>首页</el-menu-item>
         <!-- 二级菜单 -->
         <el-submenu index='1'>
           <!-- 具名插槽 -->
           <template slot="title">内容管理</template>
-          <el-menu-item>文章文章</el-menu-item>
-          <el-menu-item>内容列表</el-menu-item>
-          <el-menu-item>素材列表</el-menu-item>
-          <el-menu-item>评论列表</el-menu-item>
+          <el-menu-item index="/publish">文章文章</el-menu-item>
+          <el-menu-item index="/article">内容列表</el-menu-item>
+          <el-menu-item index='/comment'>素材列表</el-menu-item>
+          <el-menu-item index="image">评论列表</el-menu-item>
         </el-submenu>
          <!-- 二级菜单 -->
         <el-submenu index='2'>

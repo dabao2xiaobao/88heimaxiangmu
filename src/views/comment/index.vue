@@ -1,5 +1,5 @@
 <template>
-  <div class="评论列表"></div>
+  <div class="comment">评论列表</div>
 </template>
 
 <script>
