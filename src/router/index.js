@@ -4,6 +4,10 @@ import VueRouter from 'vue-router'
 import Layout from '../views/layout'
 import Login from '../views/login'
 import Home from '@/views/home'
+import Article from '@/views/article'
+import Publich from '@/views/publich'
+import Comment from '@/views/comment'
+import Image from '@/views/image'
 Vue.use(VueRouter)
 
 const routes = [
@@ -20,6 +24,22 @@ const routes = [
         // 首页
         path: '',
         component: Home
+      },
+      {
+        path: '/article',
+        component: Article
+      },
+      {
+        path: '/publich',
+        component: Publich
+      },
+      {
+        path: '/comment',
+        component: Comment
+      },
+      {
+        path: '/image',
+        component: Image
       }
     ]
   },
