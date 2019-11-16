@@ -28,8 +28,8 @@
           </el-radio-group>
         </el-form-item> -->
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">发表</el-button>
-          <el-button>存入草稿</el-button>
+          <el-button type="primary" @click="onSubmit(false)">发表</el-button>
+          <el-button @click="onSubmit(true)">存入草稿</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -57,8 +57,26 @@ export default {
     this.loadChannels()
   },
   methods: {
-    onSubmit () {
-      console.log('submit!')
+    onSubmit (draft) {
+      // console.log('submit!')
+      this.$axios({
+        method: 'POTH',
+        url: '/articles',
+        // headers参数
+        headers: {
+          Authorization: `Bearer ${window.localStorage.getItem('user-token')}`
+        },
+        // Query参数
+        params: {
+          draft
+        },
+        // body参数
+        data: this.article
+      }).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err, '保存失败')
+      })
     },
     loadChannels () {
       // 有些接口需要 token，有些接口不需要 token
