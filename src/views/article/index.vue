@@ -149,11 +149,12 @@ export default {
       // 过滤数据的表单
       filterForm: {
         status: null,
-        channel_id: null,
+        // channel_id: null,
         begin_pubdate: '',
-        end_pubdate: ''
+        end_pubdate: '',
+        channel_id: null
       },
-      rangeDate: '',
+      rangeDate: [], // 日期范围（开始时间，结束时间）
       articles: [], // 文章数据列表
       articleStatus: [
         {
