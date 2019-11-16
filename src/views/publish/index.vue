@@ -79,9 +79,9 @@ export default {
         method: 'POTH',
         url: '/articles',
         // headers参数
-        headers: {
-          Authorization: `Bearer ${window.localStorage.getItem('user-token')}`
-        },
+        // headers: {
+        //   Authorization: `Bearer ${window.localStorage.getItem('user-token')}`
+        // },
         // Query参数
         params: {
           draft
