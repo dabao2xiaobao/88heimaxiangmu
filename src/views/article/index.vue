@@ -22,18 +22,20 @@
        -->
       <el-form ref="form" label-width="80px">
         <el-form-item label="文章状态">
+          <!-- 单选框组火把选中的radio的lable同步给绑定的数据 -->
           <el-radio-group v-model="filterForm.status">
-            <el-radio label="全部"></el-radio>
-            <el-radio label="草稿"></el-radio>
-            <el-radio label="待审核"></el-radio>
-            <el-radio label="审核通过"></el-radio>
-            <el-radio label="审核失败"></el-radio>
+            <el-radio :label="null">全部</el-radio>
+            <el-radio label="0">草稿</el-radio>
+            <el-radio label="1">待审核</el-radio>
+            <el-radio label="2">审核通过</el-radio>
+            <el-radio label="3">审核失败</el-radio>
+            <el-radio label="4">已删除</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="频道列表">
           <el-select placeholder="请选择活动区域" v-model="filterForm.channel_id">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
+            <el-option label="='所有频道" :value="null"></el-option>
+            <el-option v-for="channel in channels" :key='channel.id' :label="channel.name" :value="channel.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="时间选择">
@@ -42,11 +44,13 @@
             type="daterange"
             range-separator="至"
             start-placeholder="开始日期"
-            end-placeholder="结束日期">
+            end-placeholder="结束日期"
+            value-format="yyyy-MM-dd">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">查询</el-button>
+          <!-- 点击查询按钮,重新发送请求,从第一页开始 -->
+          <el-button @click='loadArticles(1)' type="primary">查询</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -59,6 +63,7 @@
       </div>
       <el-table
         :data="articles"
+          v-loading="loading"
         style="width: 100%">
         <el-table-column
           prop="date"
@@ -117,7 +122,7 @@
           prop="address"
           label="操作">
            <template>
-            <el-button type="danger">删除</el-button>
+            <el-button @click="onDelete(scope.row.id)" type="danger">删除</el-button>
             <el-button type="primary">编辑</el-button>
           </template>
         </el-table-column>
@@ -129,7 +134,8 @@
       background
       :total="totalCount"
       @current-change='onPageChange'
-      layout="prev, pager, next">
+      layout="prev, pager, next"
+      :disabled='loading'>
     </el-pagination>
     <!-- 分页 -->
   </div>
@@ -142,11 +148,10 @@ export default {
     return {
       // 过滤数据的表单
       filterForm: {
-        status: '',
-        channel_id: '',
+        status: null,
+        channel_id: null,
         begin_pubdate: '',
         end_pubdate: ''
-
       },
       rangeDate: '',
       articles: [], // 文章数据列表
@@ -172,7 +177,11 @@ export default {
           label: '已删除'
         }
       ],
-      totalCount: 0
+      totalCount: 0,
+      loading: true,
+      channels: []
+      // rangeDate: []
+      // channel_id: this.filterForm.channel_id
     }
   },
   created () {
@@ -197,9 +206,11 @@ export default {
     //     console.log(err, '获取数据失败')
     //   })
     this.loadArticles(1)
+    this.loadChannels()
   },
   methods: {
     loadArticles (page = 1) {
+      this.loading = true
       // 在我们的项目中，除了 /login 接口不需要 token，其它所有的接口都需要提供 token 才能请求
       // 否则后端返回 401 错误
       // 我们这里的后端要求把 token 放到请求头中
@@ -219,17 +230,49 @@ export default {
           // 页码
           page,
           // 每页大小
-          por_page: 10
+          por_page: 10,
+          // 文章状态
+          status: this.filterForm.status,
+          // 当参数值为null 的时候,数据就不传递了
+          // status: null
+          // channel_id,
+          // begin_pubdate,
+          begin_pubdate: this.rangeDate ? this.rangeDate[0] : null,
+          end_pubdate: this.rangeDate ? this.rangeDate[1] : null,
+          // end_pubdate
+          // 频道id
+          channel_id: this.filterForm.channel_id
         }
       }).then(res => {
         this.articles = res.data.data.results
         this.totalCount = res.data.data.total_count
       }).catch(err => {
         console.log(err, '获取数据失败')
+      }).finally(() => {
+      // 无论成功失败都会执行这里
+        this.loading = false
       })
     },
     onPageChange (page) {
       this.loadArticles(page)
+    },
+    loadChannels () {
+      this.$axios({
+        method: 'GET',
+        url: '/channels'
+      }).then(res => {
+        this.channels = res.data.data.channels
+      }).catch(err => {
+        console.log(err, '数据获取失败')
+      })
+    },
+    onDelete (articleId) {
+      this.$axios({
+        method: 'DELETE',
+        url: `/acticles/$(articleId)`,
+        headers: {
+        }
+      })
     }
   }
 
