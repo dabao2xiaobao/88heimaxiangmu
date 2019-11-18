@@ -78,7 +78,7 @@ export default {
   },
   created () {
     // this.loadChannels()
-    if (this.$router.params.articleId) {
+    if (this.$route.params.articleId) {
       this.loadArticle()
     }
   },
@@ -86,22 +86,26 @@ export default {
     loadArticle () {
       this.$axios({
         method: 'GET',
-        url: `/articles/${this.$router.params.articleId}`
+        url: `/articles/${this.$route.params.articleId}`
       }).then(res => {
         this.article = res.data.data
       })
     },
     onSubmit (draft) {
-      // if (this.$router.params.articleId) {
-      //   // 请求编辑文章
-      //   this.updateArticle(draft)
-      // } else {
-      //   // 请求添加文章
-      //   this.addArticle(draft)
-      // }
+      if (this.$route.params.articleId) {
+        // 请求编辑文章
+        this.updateArticle(draft)
+      } else {
+        // 请求添加文章
+        this.addArticle(draft)
+      }
+
       // console.log('submit!')
+    },
+    // 添加文章
+    addArticle (draft) {
       this.$axios({
-        method: 'POTH',
+        method: 'POST',
         url: '/articles',
         // headers参数
         // headers: {
@@ -117,6 +121,25 @@ export default {
         console.log(res)
       }).catch(err => {
         console.log(err, '保存失败')
+      })
+    },
+    // 编辑文章
+    updateArticle (draft) {
+      this.$axios({
+        method: 'PUT',
+        url: `/articles/${this.$route.params.articleId}`,
+        params: {
+          draft
+        },
+        data: this.article
+      }).then(res => {
+        this.$message({
+          type: 'success',
+          message: '更新成功'
+        })
+      }).catch(err => {
+        console.log(err)
+        this.$message.error('更新失败')
       })
     }
     // loadChannels () {

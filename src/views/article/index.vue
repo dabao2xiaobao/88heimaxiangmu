@@ -158,7 +158,7 @@ export default {
         // channel_id: null,
         begin_pubdate: '',
         end_pubdate: '',
-        channel_id: ''
+        channel_id: null
       },
       rangeDate: [], // 日期范围（开始时间，结束时间）
       articles: [], // 文章数据列表
