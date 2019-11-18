@@ -18,6 +18,7 @@
           label 表头名称
 
           width 列宽
+
         表格列默认只能渲染普通文本，如果想要渲染点儿别的东西，需要自定义表格列。
        -->
       <el-form ref="form" label-width="80px">
@@ -33,10 +34,11 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="频道列表">
-          <el-select placeholder="请选择活动区域" v-model="filterForm.channel_id">
+          <!-- <el-select placeholder="请选择活动区域" v-model="filterForm.channel_id">
             <el-option label="='所有频道" :value="null"></el-option>
             <el-option v-for="channel in channels" :key='channel.id' :label="channel.name" :value="channel.id"></el-option>
-          </el-select>
+          </el-select> -->
+          <channel-select v-model="filterForm.channel_id"></channel-select>
         </el-form-item>
         <el-form-item label="时间选择">
           <el-date-picker
@@ -123,7 +125,7 @@
           label="操作">
            <template slot-scope="scope">
             <el-button @click="onDelete(scope.row.id)" type="danger">删除</el-button>
-            <el-button type="primary">编辑</el-button>
+            <el-button @click="$router.push('/publish/' + scope.row.id)" type="primary">编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -142,8 +144,12 @@
 </template>
 
 <script>
+import ChannelSelect from '@/components/channel-select'
 export default {
   name: 'article-list',
+  components: {
+    ChannelSelect
+  },
   data () {
     return {
       // 过滤数据的表单
@@ -152,7 +158,7 @@ export default {
         // channel_id: null,
         begin_pubdate: '',
         end_pubdate: '',
-        channel_id: null
+        channel_id: ''
       },
       rangeDate: [], // 日期范围（开始时间，结束时间）
       articles: [], // 文章数据列表
@@ -180,7 +186,7 @@ export default {
       ],
       totalCount: 0,
       loading: true,
-      channels: [],
+      // channels: [],
       page: 1 // 当前页码
       // rangeDate: []
       // channel_id: this.filterForm.channel_id
@@ -208,7 +214,8 @@ export default {
     //     console.log(err, '获取数据失败')
     //   })
     this.loadArticles(1)
-    this.loadChannels()
+    // 加载频道列表
+    // this.loadChannels()
   },
   methods: {
     loadArticles (page = 1) {
@@ -256,19 +263,21 @@ export default {
       })
     },
     onPageChange (page) {
+      // 记录当前最新的页码
       this.page = page
+      // 请求加载指定页码的文章列表
       this.loadArticles(page)
     },
-    loadChannels () {
-      this.$axios({
-        method: 'GET',
-        url: '/channels'
-      }).then(res => {
-        this.channels = res.data.data.channels
-      }).catch(err => {
-        console.log(err, '数据获取失败')
-      })
-    },
+    // loadChannels () {
+    //   this.$axios({
+    //     method: 'GET',
+    //     url: '/channels'
+    //   }).then(res => {
+    //     this.channels = res.data.data.channels
+    //   }).catch(err => {
+    //     console.log(err, '数据获取失败')
+    //   })
+    // },
     onDelete (articleId) {
       // 这里报 400 错，是因为数据 id 的问题
       // 这个数据 id 不对

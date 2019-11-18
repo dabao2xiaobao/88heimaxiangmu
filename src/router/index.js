@@ -35,6 +35,10 @@ const routes = [
         component: Publish
       },
       {
+        path: '/publish/:articleId',
+        component: Publish
+      },
+      {
         path: '/comment',
         component: Comment
       },

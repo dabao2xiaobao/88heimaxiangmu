@@ -17,14 +17,18 @@
           </quill-editor>
         </el-form-item>
         <el-form-item label="频道">
-          <el-select v-model="article.channel_id" placeholder="请选择活动区域">
+          <!-- <el-select v-model="article.channel_id" placeholder="请选择活动区域">
             <el-option
               :label="channel.name"
               :value="channel.id"
               v-for="channel in channels"
               :key="channel.id"
             ></el-option>
-          </el-select>
+          </el-select> -->
+
+          <!-- 频道列表 -->
+          <channel-select v-model="article.channel_id"></channel-select>
+          <!-- 频道列表 -->
         </el-form-item>
         <!-- <el-form-item label="封面">
           <el-radio-group v-model="form.resource">
@@ -48,11 +52,14 @@ import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 // 加载富文本编辑器的核心组件
 import { quillEditor } from 'vue-quill-editor'
+// 加载注册使用
+import ChannelSelect from '@/components/channel-select'
 export default {
   name: 'PublishArticle',
   components: {
     // 注册局部组件
-    quillEditor
+    quillEditor,
+    ChannelSelect
   },
   data () {
     return {
@@ -63,17 +70,35 @@ export default {
           type: 0, // 封面类型 -1:自动，0-无图，1-1张，3-3张
           images: [] // 图片，无图就是空数组即可
         },
-        channel_id: ''
+        channel_id: '4'
       },
-      channels: [],
+      // channels: [],
       editorOption: {}
     }
   },
   created () {
-    this.loadChannels()
+    // this.loadChannels()
+    if (this.$router.params.articleId) {
+      this.loadArticle()
+    }
   },
   methods: {
+    loadArticle () {
+      this.$axios({
+        method: 'GET',
+        url: `/articles/${this.$router.params.articleId}`
+      }).then(res => {
+        this.article = res.data.data
+      })
+    },
     onSubmit (draft) {
+      // if (this.$router.params.articleId) {
+      //   // 请求编辑文章
+      //   this.updateArticle(draft)
+      // } else {
+      //   // 请求添加文章
+      //   this.addArticle(draft)
+      // }
       // console.log('submit!')
       this.$axios({
         method: 'POTH',
@@ -93,23 +118,25 @@ export default {
       }).catch(err => {
         console.log(err, '保存失败')
       })
-    },
-    loadChannels () {
-      // 有些接口需要 token，有些接口不需要 token
-      // 是否需要，应该由接口文档指示
-      this.$axios({
-        method: 'GET',
-        url: '/channels'
-      }).then(res => {
-        this.channels = res.data.data.channels
-      }).catch(err => {
-        console.log(err, '获取数据失败')
-      })
     }
+    // loadChannels () {
+    //   // 有些接口需要 token，有些接口不需要 token
+    //   // 是否需要，应该由接口文档指示
+    //   this.$axios({
+    //     method: 'GET',
+    //     url: '/channels'
+    //   }).then(res => {
+    //     this.channels = res.data.data.channels
+    //   }).catch(err => {
+    //     console.log(err, '获取数据失败')
+    //   })
+    // }
   }
 }
 </script>
 
 <style>
-
+.ql-editor {
+  min-height: 300px;
+}
 </style>
